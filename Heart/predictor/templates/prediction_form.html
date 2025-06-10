@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Prediction</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('{% static "images/background.jpg" %}');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.6); /* Dark background for better visibility */
+            padding: 40px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        p {
+            margin: 10px 0;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .form-column {
+            width: 48%; /* 48% width for each column (leaving space in the middle) */
+        }
+
+        .form-column input {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            border-radius: 5px;
+            border: none;
+            background-color: #f0f0f0;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .logout-link {
+            display: block;
+            margin-top: 15px;
+            color: lightgray;
+            text-decoration: none;
+        }
+
+        .logout-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Heart Disease Risk Prediction</h1>
+        <p>Welcome, {{ user.first_name }} {{ user.last_name }}!</p>
+        <form method="POST" action="{% url 'predict_heart_disease' %}">
+            {% csrf_token %}
+            
+            <!-- Form Rows with Left and Right Columns -->
+            <div class="form-row">
+                <div class="form-column">
+                    <input type="number" name="age" placeholder="Age" required>
+                    <input type="number" name="chest_pain_type " placeholder="chest pain type" required>
+                    <input type="number" name="cholesterol" placeholder="Cholesterol" required>
+                    <input type="number" name="resting_ecg" placeholder="Resting ECG" required>
+                    <input type="number" name="exercise_angina" placeholder="Exercise Angina (1/0)" required>
+                    <input type="number" name="st_slope" placeholder="ST Slope" required>
+                </div>
+                <div class="form-column">
+                    <input type="number" name="sex" placeholder="Sex (1/0)" required>
+                    <input type="number" name="resting_bp" placeholder="Resting BP" required>
+                    <input type="number" name="fasting_blood_sugar" placeholder="Fasting Blood Sugar" required>
+                    <input type="number" name="max_heart_rate" placeholder="Max Heart Rate" required>
+                    <input type="number" name="oldpeak" placeholder="Oldpeak" required>
+                </div>
+            </div>
+            
+
+            <button type="submit">Predict</button>
+        </form>
+        <!-- Display the prediction result -->
+        {% if prediction %}
+            <p class="result">Prediction: {{ prediction }}</p>
+        {% endif %}
+        
+        <!-- Display an error message if input is invalid -->
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        
+        <a href="{% url 'logout_view' %}">Logout</a>
+
+    </div>
+
+</body>
+</html>
